@@ -32,11 +32,7 @@ export type AccountLinkSyncResult = {
   verified: boolean;
   /** Detall de la discrepància, si n'hi ha. */
   mismatch?: {
-    reason:
-      | "missing-row"
-      | "device-mismatch"
-      | "no-local-device"
-      | "verify-error";
+    reason: "missing-row" | "device-mismatch" | "no-local-device" | "verify-error";
     localDeviceId: string | null;
     remoteDeviceId: string | null;
     userId: string;
@@ -56,7 +52,9 @@ export type AccountLinkSyncResult = {
  * a consola (`[accountLink] mismatch …`) per facilitar el debug.
  */
 export async function syncAccountLinkAfterLogin(): Promise<AccountLinkSyncResult> {
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) return { changed: false, verified: false };
 
   const local = getLocalDeviceId();
