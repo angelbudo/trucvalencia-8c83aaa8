@@ -42,6 +42,8 @@ interface TableSeatPickerProps {
   highlightSeat?: PlayerId | null;
   /** Mostra etiquetes de teams (Nosaltres / Ells) sota cada seient. */
   showTeams?: boolean;
+  /** Augmenta 2px només els textos propis de la taula/seients. */
+  textSize?: "normal" | "large";
 }
 
 // Mapatge de seient lògic (0 sud, 1 oest, 2 nord, 3 est) a posició a la mesa.
@@ -66,6 +68,7 @@ export function TableSeatPicker({
   onSeatClick,
   highlightSeat = null,
   showTeams = true,
+  textSize = "normal",
 }: TableSeatPickerProps) {
   return (
     <div className="relative w-full aspect-[4/3] max-w-sm mx-auto">
@@ -87,6 +90,7 @@ export function TableSeatPicker({
           highlighted={highlightSeat === s.seat}
           onClick={s.selectable ? () => onSeatClick?.(s.seat) : undefined}
           showTeam={showTeams}
+          textSize={textSize}
         />
       ))}
     </div>
@@ -98,11 +102,13 @@ function SeatBubble({
   highlighted,
   onClick,
   showTeam,
+  textSize,
 }: {
   info: SeatInfo;
   highlighted: boolean;
   onClick?: () => void;
   showTeam: boolean;
+  textSize: "normal" | "large";
 }) {
   const { occupant, seat } = info;
   const team = seat % 2 === 0 ? "nos" : "ells";
@@ -196,7 +202,8 @@ function SeatBubble({
       </Tag>
       <span
         className={cn(
-          "text-[11px] font-display font-bold leading-tight max-w-[88px] text-center truncate",
+          "font-display font-bold leading-tight max-w-[88px] text-center truncate",
+          textSize === "large" ? "text-[13px]" : "text-[11px]",
           occupant.kind === "me" && "text-primary",
           occupant.kind === "human" && "text-team-nos",
           occupant.kind === "bot" && "text-foreground/80",
@@ -208,7 +215,8 @@ function SeatBubble({
       {showTeam && (
         <span
           className={cn(
-            "text-[8px] uppercase tracking-widest leading-none",
+            "uppercase tracking-widest leading-none",
+            textSize === "large" ? "text-[10px]" : "text-[8px]",
             team === "nos" ? "text-team-nos/80" : "text-team-ells/80",
           )}
         >
