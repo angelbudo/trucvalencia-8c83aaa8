@@ -28,11 +28,15 @@ export function useAvatarsByDevice(deviceIds: string[]): Record<string, string |
 
       const missing = ids.filter((id) => !next[id]);
       await Promise.all(missing.map(async (id) => {
-        const { data: profile } = await supabase.rpc("get_public_player_profile_by_device", {
-          p_device_id: id,
-        });
-        const row = Array.isArray(profile) ? profile[0] : profile;
-        next[id] = (row as { avatar_url?: string | null } | undefined)?.avatar_url ?? null;
+        try {
+          const { data: profile } = await supabase.rpc("get_public_player_profile_by_device", {
+            p_device_id: id,
+          });
+          const row = Array.isArray(profile) ? profile[0] : profile;
+          next[id] = (row as { avatar_url?: string | null } | undefined)?.avatar_url ?? null;
+        } catch {
+          next[id] = null;
+        }
       }));
 
       if (alive) setMap(next);
