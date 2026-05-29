@@ -336,7 +336,7 @@ function Sala() {
               {t("sala.host_seat_hint")}
             </p>
           )}
-          <TableSeatPicker seats={seats} onSeatClick={handlePickSeat} highlightSeat={data.mySeat} />
+          <TableSeatPicker seats={seats} onSeatClick={handlePickSeat} highlightSeat={data.mySeat} textSize="large" />
           {joining && <p className="text-[11px] text-muted-foreground text-center">{t("sala.reserving")}</p>}
         </section>
 
