@@ -333,20 +333,21 @@ function Lobby() {
 
   return (
     <main className="menu-screen min-h-screen flex flex-col items-center justify-center px-5 py-8">
+      <div className="fixed top-4 inset-x-4 z-50 flex items-center justify-between">
+        <ShareAppButton />
+        <Button
+          onClick={() => navigate(isSalaView ? "/online/sales" : "/")}
+          size="sm"
+          variant="outline"
+          className="h-8 w-8 p-0 border-foreground/80 text-foreground hover:bg-foreground/10"
+          aria-label={isSalaView ? t("lobby.back_to_sales") : t("common.back_home")}
+          title={isSalaView ? t("lobby.back_to_sales") : t("common.back_home")}
+        >
+          <LogOut className="w-4 h-4" />
+        </Button>
+      </div>
       <div className="w-full max-w-3xl flex flex-col gap-5">
-        <div className="flex items-center justify-between">
-          <ShareAppButton />
-          <Button
-            onClick={() => navigate(isSalaView ? "/online/sales" : "/")}
-            size="sm"
-            variant="outline"
-            className="h-8 w-8 p-0 border-foreground/80 text-foreground hover:bg-foreground/10"
-            aria-label={isSalaView ? t("lobby.back_to_sales") : t("common.back_home")}
-            title={isSalaView ? t("lobby.back_to_sales") : t("common.back_home")}
-          >
-            <LogOut className="w-4 h-4" />
-          </Button>
-        </div>
+
 
         <header className="text-center">
           <h1 className="font-title font-black italic text-gold text-3xl pr-2 text-center">
