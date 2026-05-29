@@ -146,7 +146,7 @@ function Sala() {
   const humanDeviceIds = (data?.players ?? [])
     .filter((p) => data?.room.seatKinds[p.seat] === "human" && !!p.deviceId)
     .map((p) => p.deviceId);
-  const avatarsByDevice = useAvatarsByDevice(humanDeviceIds);
+  const avatarsByDevice = useAvatarsByDevice(humanDeviceIds, user ? { [deviceId]: user.id } : {});
 
   if (!ready || loading) return <Loading />;
 
