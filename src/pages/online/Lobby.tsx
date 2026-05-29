@@ -277,7 +277,10 @@ function Lobby() {
     }
     return Array.from(ids);
   }, [visible]);
-  const lobbyAvatars = useAvatarsByDevice(lobbyDeviceIds, user ? { [deviceId]: user.id } : {});
+  const lobbyAvatars = useAvatarsByDevice(
+    lobbyDeviceIds,
+    user ? { [deviceId]: user.id } : {},
+  );
 
   // Mesa pròpia oberta en aquesta sala (estat lobby amb seients lliures
   // on aquest dispositiu ja està assegut). S'usa per oferir "Invitar"
@@ -621,7 +624,12 @@ function TableCard({
           )}
         </div>
       </div>
-      <TableSeatPicker seats={seats} onSeatClick={handleSeatClick} showTeams={false} textSize="large" />
+      <TableSeatPicker
+        seats={seats}
+        onSeatClick={handleSeatClick}
+        showTeams={false}
+        textSize="large"
+      />
       {showLobbyInfo && (
         <div className="h-9 flex flex-col items-end justify-end text-[12px] text-muted-foreground leading-tight gap-0.5">
           <span>Cames a guanyar: <strong className="text-foreground">{room.targetCames}</strong></span>
@@ -701,7 +709,12 @@ function PlaceholderTableCard({
         </span>
         <span className="text-[12px] text-muted-foreground uppercase tracking-wider">{t("common.free")}</span>
       </div>
-      <TableSeatPicker seats={seats} onSeatClick={onCreate} showTeams={false} textSize="large" />
+      <TableSeatPicker
+        seats={seats}
+        onSeatClick={onCreate}
+        showTeams={false}
+        textSize="large"
+      />
       <div className="flex items-center justify-center">
         <Button
           size="sm"
