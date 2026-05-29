@@ -284,25 +284,26 @@ function Sala() {
 
   return (
     <main className="menu-screen min-h-screen flex flex-col items-center justify-center px-5 py-8">
+      <div className="fixed top-4 inset-x-4 z-50 flex items-center justify-between">
+        <ShareAppButton />
+        <Button
+          onClick={async () => {
+            if (data?.room && data.mySeat != null && data.room.status === "lobby") {
+              try { await leaveRoom({ data: { roomId: data.room.id, deviceId } }); } catch { /* noop */ }
+            }
+            navigate("/");
+          }}
+          size="sm"
+          variant="outline"
+          className="h-8 w-8 p-0 border-foreground/80 text-foreground hover:bg-foreground/10"
+          aria-label={t("common.back_home")}
+          title={t("common.back_home")}
+        >
+          <LogOut className="w-4 h-4" />
+        </Button>
+      </div>
       <div className="w-full max-w-md flex flex-col gap-5">
-        <div className="flex items-center justify-between">
-          <ShareAppButton />
-          <Button
-            onClick={async () => {
-              if (data?.room && data.mySeat != null && data.room.status === "lobby") {
-                try { await leaveRoom({ data: { roomId: data.room.id, deviceId } }); } catch { /* noop */ }
-              }
-              navigate("/");
-            }}
-            size="sm"
-            variant="outline"
-            className="h-8 w-8 p-0 border-foreground/80 text-foreground hover:bg-foreground/10"
-            aria-label={t("common.back_home")}
-            title={t("common.back_home")}
-          >
-            <LogOut className="w-4 h-4" />
-          </Button>
-        </div>
+
 
         <header className="text-center flex flex-col items-center gap-2">
           <div className="inline-flex items-center gap-3">

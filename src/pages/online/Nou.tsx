@@ -121,20 +121,21 @@ function NovaSala() {
   if (!hasName) {
     return (
       <main className="menu-screen min-h-screen flex flex-col items-center justify-center px-5 py-8">
+        <div className="fixed top-4 inset-x-4 z-50 flex items-center justify-between">
+          <ShareAppButton />
+          <Button
+            onClick={() => navigate("/")}
+            size="sm"
+            variant="outline"
+            className="h-8 w-8 p-0 border-foreground/80 text-foreground hover:bg-foreground/10"
+            aria-label={t("common.back_home")}
+            title={t("common.back_home")}
+          >
+            <LogOut className="w-4 h-4" />
+          </Button>
+        </div>
         <div className="w-full max-w-md flex flex-col gap-5">
-          <div className="flex items-center justify-between">
-            <ShareAppButton />
-            <Button
-              onClick={() => navigate("/")}
-              size="sm"
-              variant="outline"
-              className="h-8 w-8 p-0 border-foreground/80 text-foreground hover:bg-foreground/10"
-              aria-label={t("common.back_home")}
-              title={t("common.back_home")}
-            >
-              <LogOut className="w-4 h-4" />
-            </Button>
-          </div>
+
           <header className="text-center">
             <h1 className="font-title font-black italic text-gold text-3xl pr-2 text-center">{t("nou.create_online")}</h1>
             <p className="mt-1 text-sm text-[#c2b9a3]">{t("nou.need_name_create")}</p>
