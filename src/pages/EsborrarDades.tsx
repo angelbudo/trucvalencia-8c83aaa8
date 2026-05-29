@@ -253,7 +253,7 @@ const EsborrarDades = () => {
             {step === "input" && (
               <form onSubmit={onPreview} className="not-prose flex flex-col gap-3">
                 <label htmlFor="deviceId" className="text-[14px] font-medium">{T.label}</label>
-                <Input id="deviceId" type="text" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} placeholder="p. ej. 3f8a1c20-…" autoComplete="off" disabled={loading} className="bg-background/40 border-primary/30" />
+                <Input id="deviceId" type="text" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} placeholder="p. ej. 3f8a1c20-…" autoComplete="off" disabled={loading} className="bg-background/40 border-primary/30 text-white" />
                 {!looksValid && trimmed.length > 0 && (
                   <p className="text-[12px] text-destructive">{T.invalidFormat}</p>
                 )}
@@ -262,7 +262,7 @@ const EsborrarDades = () => {
                     <ShieldAlert className="w-4 h-4" /> {error}
                   </p>
                 )}
-                <Button type="submit" disabled={!looksValid || loading} variant="outline" className="w-full">
+                <Button type="submit" disabled={!looksValid || loading} variant="outline" className="w-full text-white hover:text-white">
                   {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Eye className="w-4 h-4 mr-2" />}
                   {T.btnCheck}
                 </Button>
