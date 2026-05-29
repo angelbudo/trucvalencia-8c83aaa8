@@ -146,7 +146,10 @@ function Sala() {
   const humanDeviceIds = (data?.players ?? [])
     .filter((p) => data?.room.seatKinds[p.seat] === "human" && !!p.deviceId)
     .map((p) => p.deviceId);
-  const avatarsByDevice = useAvatarsByDevice(humanDeviceIds);
+  const avatarsByDevice = useAvatarsByDevice(
+    humanDeviceIds,
+    user ? { [deviceId]: user.id } : {},
+  );
 
   if (!ready || loading) return <Loading />;
 
@@ -336,7 +339,12 @@ function Sala() {
               {t("sala.host_seat_hint")}
             </p>
           )}
-          <TableSeatPicker seats={seats} onSeatClick={handlePickSeat} highlightSeat={data.mySeat} />
+          <TableSeatPicker
+            seats={seats}
+            onSeatClick={handlePickSeat}
+            highlightSeat={data.mySeat}
+            textSize="large"
+          />
           {joining && <p className="text-[11px] text-muted-foreground text-center">{t("sala.reserving")}</p>}
         </section>
 
