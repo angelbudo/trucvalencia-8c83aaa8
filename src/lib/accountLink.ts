@@ -79,8 +79,10 @@ export async function syncAccountLinkAfterLogin(): Promise<AccountLinkSyncResult
     // Cas 2: primer login → guardem el device_id local actual al compte
     await supabase
       .from("account_links")
-      .update({ device_id: local })
-      .eq("user_id", user.id);
+      .upsert(
+        { user_id: user.id, email: user.email ?? "", device_id: local },
+        { onConflict: "user_id" },
+      );
   }
 
   // ─── Verificació post-sync ────────────────────────────────────────────
