@@ -277,7 +277,7 @@ function Lobby() {
     }
     return Array.from(ids);
   }, [visible]);
-  const lobbyAvatars = useAvatarsByDevice(lobbyDeviceIds);
+  const lobbyAvatars = useAvatarsByDevice(lobbyDeviceIds, user ? { [deviceId]: user.id } : {});
 
   // Mesa pròpia oberta en aquesta sala (estat lobby amb seients lliures
   // on aquest dispositiu ja està assegut). S'usa per oferir "Invitar"
