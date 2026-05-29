@@ -219,21 +219,21 @@ const EsborrarDades = () => {
           </Button>
         </div>
 
-        <article className="max-w-none text-foreground [&_p]:text-[12px] [&_p]:leading-relaxed [&_ul]:text-[12px] [&_ul]:leading-relaxed [&_li]:text-[12px] [&_li]:leading-relaxed">
+        <article className="max-w-none text-muted-foreground [&_p]:text-[14px] [&_p]:leading-relaxed [&_ul]:text-[14px] [&_ul]:leading-relaxed [&_li]:text-[14px] [&_li]:leading-relaxed">
           <p className="text-xs text-muted-foreground">{T.headerSub}</p><br/>
-          <h1 className="font-title font-black italic text-gold text-2xl normal-case mb-2">{T.title}</h1>
-          <p className="text-muted-foreground">{T.intro}</p>
+          <h1 className="font-title font-black italic text-gold text-[26px] normal-case mb-2">{T.title}</h1>
+          <p>{T.intro}</p>
 
           <section className="mt-6">
-            <h2 className="font-display font-bold text-base mt-4 mb-2">{T.h2What}</h2>
+            <h2 className="font-display font-bold text-base mt-4 mb-2 text-foreground">{T.h2What}</h2>
             <ul className="list-disc pl-6 my-3 space-y-1">
               {T.whatList.map((item, i) => <li key={i}>{item}</li>)}
             </ul>
           </section>
 
           <section className="mt-6">
-            <h2 className="font-display font-bold text-base mt-4 mb-2">{T.h2Consent}</h2>
-            <div className="rounded-md border border-border bg-muted/20 p-4 text-[12px] space-y-2">
+            <h2 className="font-display font-bold text-base mt-4 mb-2 text-foreground">{T.h2Consent}</h2>
+            <div className="rounded-md border border-border bg-muted/20 p-4 text-[14px] space-y-2">
               <p className="font-medium">{T.consentLead}</p>
               <ol className="list-decimal pl-5 space-y-1">
                 {T.consentItems.map((item, i) => <li key={i}>{item}</li>)}
@@ -242,22 +242,23 @@ const EsborrarDades = () => {
           </section>
 
           <section className="mt-6">
-            <h2 className="font-display font-bold text-base mt-4 mb-2">{T.h2GetId}</h2>
+            <h2 className="font-display font-bold text-base mt-4 mb-2 text-foreground">{T.h2GetId}</h2>
             <p>{T.getIdP}</p>
-            <p className="text-[10px] text-muted-foreground">{T.getIdSmall}</p>
+            <p className="text-[12px]">{T.getIdSmall}</p>
           </section>
 
+
           <section className="mt-6">
-            <h2 className="font-display font-bold text-base mt-4 mb-2">{T.h2Form}</h2>
+            <h2 className="font-display font-bold text-base mt-4 mb-2 text-foreground">{T.h2Form}</h2>
             {step === "input" && (
               <form onSubmit={onPreview} className="not-prose flex flex-col gap-3">
-                <label htmlFor="deviceId" className="text-[12px] font-medium">{T.label}</label>
+                <label htmlFor="deviceId" className="text-[14px] font-medium">{T.label}</label>
                 <Input id="deviceId" type="text" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} placeholder="p. ej. 3f8a1c20-…" autoComplete="off" disabled={loading} className="bg-background/40 border-primary/30" />
                 {!looksValid && trimmed.length > 0 && (
-                  <p className="text-[10px] text-destructive">{T.invalidFormat}</p>
+                  <p className="text-[12px] text-destructive">{T.invalidFormat}</p>
                 )}
                 {error && (
-                  <p className="text-[12px] text-destructive flex items-center gap-2">
+                  <p className="text-[14px] text-destructive flex items-center gap-2">
                     <ShieldAlert className="w-4 h-4" /> {error}
                   </p>
                 )}
@@ -265,26 +266,26 @@ const EsborrarDades = () => {
                   {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Eye className="w-4 h-4 mr-2" />}
                   {T.btnCheck}
                 </Button>
-                <p className="text-[10px] text-muted-foreground">{T.note}</p>
+                <p className="text-[12px]">{T.note}</p>
               </form>
             )}
 
             {step === "preview" && preview && (
               <div className="not-prose flex flex-col gap-4">
-                <div className="rounded-md border border-primary/30 bg-primary/5 p-3 text-[12px]">
-                  <p className="text-[10px] text-muted-foreground">{T.deviceIdentLabel}</p>
-                  <p className="font-mono text-[10px] break-all mt-1">{trimmed}</p>
+                <div className="rounded-md border border-primary/30 bg-primary/5 p-3 text-[14px]">
+                  <p className="text-[12px]">{T.deviceIdentLabel}</p>
+                  <p className="font-mono text-[12px] break-all mt-1">{trimmed}</p>
                 </div>
 
                 {!hasAnyData ? (
-                  <div className="rounded-md border border-border bg-muted/30 p-3 text-[12px]">
+                  <div className="rounded-md border border-border bg-muted/30 p-3 text-[14px]">
                     <p className="font-medium">{T.noData}</p>
-                    <p className="text-[10px] text-muted-foreground mt-1">{T.noDataSub}</p>
+                    <p className="text-[12px] mt-1">{T.noDataSub}</p>
                   </div>
                 ) : (
-                  <div className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-[12px] flex flex-col gap-2">
+                  <div className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-[14px] flex flex-col gap-2">
                     <p className="font-medium text-destructive">{T.deleteLead}</p>
-                    <ul className="text-[10px] space-y-1 ml-4 list-disc">
+                    <ul className="text-[12px] space-y-1 ml-4 list-disc">
                       {Object.entries(preview.deleted).filter(([, n]) => n > 0).map(([t, n]) => (
                         <li key={t}><strong>{n}</strong> {labelForTable(t, isEs)}</li>
                       ))}
@@ -296,14 +297,14 @@ const EsborrarDades = () => {
                 )}
 
                 {hasAnyData && (
-                  <label className="flex items-start gap-2 text-[12px]">
+                  <label className="flex items-start gap-2 text-[14px]">
                     <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} disabled={loading} className="mt-1" />
                     <span>{T.confirmCheck}</span>
                   </label>
                 )}
 
                 {error && (
-                  <p className="text-[12px] text-destructive flex items-center gap-2">
+                  <p className="text-[14px] text-destructive flex items-center gap-2">
                     <ShieldAlert className="w-4 h-4" /> {error}
                   </p>
                 )}
@@ -323,12 +324,12 @@ const EsborrarDades = () => {
             )}
 
             {step === "done" && result && (
-              <div className="not-prose rounded-md border border-team-nos/40 bg-team-nos/10 p-4 text-[12px] flex flex-col gap-2">
-                <p className="flex items-center gap-2 font-medium text-team-nos text-[14px]">
+              <div className="not-prose rounded-md border border-team-nos/40 bg-team-nos/10 p-4 text-[14px] flex flex-col gap-2">
+                <p className="flex items-center gap-2 font-medium text-team-nos text-[16px]">
                   <CheckCircle2 className="w-5 h-5" /> {T.doneTitle}
                 </p>
-                <p className="text-[12px]">{T.doneP}</p>
-                <ul className="text-[10px] ml-4 list-disc space-y-0.5 text-muted-foreground">
+                <p className="text-[14px]">{T.doneP}</p>
+                <ul className="text-[12px] ml-4 list-disc space-y-0.5">
                   {Object.entries(result.deleted).filter(([, n]) => n > 0).map(([t, n]) => (
                     <li key={t}>{T.deletedPrefix} <strong>{n}</strong> {labelForTable(t, isEs)}</li>
                   ))}
@@ -337,14 +338,15 @@ const EsborrarDades = () => {
                   ))}
                   {totalToDelete + totalToAnonymize === 0 && <li>{T.noneFound}</li>}
                 </ul>
-                <p className="text-[10px] text-muted-foreground mt-2">{T.doneSmall}</p>
+                <p className="text-[12px] mt-2">{T.doneSmall}</p>
               </div>
             )}
           </section>
 
-          <section className="mt-8 text-[12px] text-muted-foreground">
+          <section className="mt-8 text-[14px]">
             <p>{T.moreInfo}</p>
           </section>
+
         </article>
       </div>
     </main>
