@@ -56,7 +56,7 @@ const App = () => (
             <Route path="/cookies" element={<PoliticaCookies />} />
             <Route path="/reportar" element={<Reportar />} />
             <Route path="/esborrar-dades" element={<EsborrarDades />} />
-            <Route path="/eliminar-cuenta" element={<EliminarCuenta />} />
+            <Route path="/eliminar-cuenta" element={<EsborrarDades />} />
             <Route path="/regles" element={<Regles />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/perfil" element={<Perfil />} />
