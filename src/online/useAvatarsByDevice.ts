@@ -7,22 +7,35 @@ import { supabase } from "@/integrations/supabase/client";
  */
 export function useAvatarsByDevice(deviceIds: string[]): Record<string, string | null> {
   const [map, setMap] = useState<Record<string, string | null>>({});
-  const key = deviceIds.slice().sort().join("|");
+  const key = Array.from(new Set(deviceIds.filter(Boolean))).sort().join("|");
   useEffect(() => {
-    if (deviceIds.length === 0) return;
+    const ids = Array.from(new Set(deviceIds.filter(Boolean)));
+    if (ids.length === 0) {
+      setMap({});
+      return;
+    }
     let alive = true;
     (async () => {
+      const next: Record<string, string | null> = {};
       const { data, error } = await supabase.rpc("get_public_avatars_by_devices", {
-        p_device_ids: deviceIds,
+        p_device_ids: ids,
       });
-      if (!alive || error || !data) return;
-      setMap((prev) => {
-        const next = { ...prev };
+      if (!error && data) {
         for (const row of data as Array<{ device_id: string; avatar_url: string | null }>) {
           next[row.device_id] = row.avatar_url ?? null;
         }
-        return next;
-      });
+      }
+
+      const missing = ids.filter((id) => !(id in next));
+      await Promise.all(missing.map(async (id) => {
+        const { data: profile } = await supabase.rpc("get_public_player_profile_by_device", {
+          p_device_id: id,
+        });
+        const row = Array.isArray(profile) ? profile[0] : profile;
+        next[id] = (row as { avatar_url?: string | null } | undefined)?.avatar_url ?? null;
+      }));
+
+      if (alive) setMap(next);
     })();
     return () => { alive = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
