@@ -385,7 +385,7 @@ function Lobby() {
         {error && <p className="text-xs text-destructive text-center">{error}</p>}
 
         <div className="border-t border-gold/60" />
-        <section className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-6 divide-y divide-gold/60 sm:divide-y-0 sm:[&>*:nth-child(odd)]:border-r sm:[&>*:nth-child(odd)]:border-gold/60 sm:[&>*:nth-child(odd)]:pr-6 sm:[&>*:nth-child(even)]:pl-0 sm:[&>*:nth-child(n+3)]:border-t sm:[&>*:nth-child(n+3)]:border-gold/60 sm:[&>*:nth-child(n+3)]:pt-4 [&>*]:pt-4 [&>*]:pb-[30px] first:[&>*]:pt-0 last:[&>*]:pb-0">
+        <section className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-6 divide-y divide-gold/60 sm:divide-y-0 sm:[&>*:nth-child(odd)]:border-r sm:[&>*:nth-child(odd)]:border-gold/60 sm:[&>*:nth-child(odd)]:pr-6 sm:[&>*:nth-child(even)]:pl-0 sm:[&>*:nth-child(n+3)]:border-t sm:[&>*:nth-child(n+3)]:border-gold/60 sm:[&>*:nth-child(n+3)]:pt-[30px] [&>*]:pt-[30px] [&>*]:pb-[30px] [&>*:first-child]:pt-0 sm:[&>*:nth-child(2)]:pt-0 [&>*:last-child]:pb-0 sm:[&>*:nth-last-child(2):nth-child(odd)]:pb-0">
           {visible.length === 0 && placeholderCount === 0 ? (
             <div className="col-span-full flex justify-center py-8">
               <Loader2 className="w-5 h-5 animate-spin text-primary" />
