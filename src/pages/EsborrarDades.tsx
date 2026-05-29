@@ -219,21 +219,21 @@ const EsborrarDades = () => {
           </Button>
         </div>
 
-        <article className="max-w-none text-foreground [&_p]:text-[12px] [&_p]:leading-relaxed [&_ul]:text-[12px] [&_ul]:leading-relaxed [&_li]:text-[12px] [&_li]:leading-relaxed">
+        <article className="max-w-none text-muted-foreground [&_p]:text-[14px] [&_p]:leading-relaxed [&_ul]:text-[14px] [&_ul]:leading-relaxed [&_li]:text-[14px] [&_li]:leading-relaxed">
           <p className="text-xs text-muted-foreground">{T.headerSub}</p><br/>
-          <h1 className="font-title font-black italic text-gold text-2xl normal-case mb-2">{T.title}</h1>
-          <p className="text-muted-foreground">{T.intro}</p>
+          <h1 className="font-title font-black italic text-gold text-[26px] normal-case mb-2">{T.title}</h1>
+          <p>{T.intro}</p>
 
           <section className="mt-6">
-            <h2 className="font-display font-bold text-base mt-4 mb-2">{T.h2What}</h2>
+            <h2 className="font-display font-bold text-base mt-4 mb-2 text-foreground">{T.h2What}</h2>
             <ul className="list-disc pl-6 my-3 space-y-1">
               {T.whatList.map((item, i) => <li key={i}>{item}</li>)}
             </ul>
           </section>
 
           <section className="mt-6">
-            <h2 className="font-display font-bold text-base mt-4 mb-2">{T.h2Consent}</h2>
-            <div className="rounded-md border border-border bg-muted/20 p-4 text-[12px] space-y-2">
+            <h2 className="font-display font-bold text-base mt-4 mb-2 text-foreground">{T.h2Consent}</h2>
+            <div className="rounded-md border border-border bg-muted/20 p-4 text-[14px] space-y-2">
               <p className="font-medium">{T.consentLead}</p>
               <ol className="list-decimal pl-5 space-y-1">
                 {T.consentItems.map((item, i) => <li key={i}>{item}</li>)}
@@ -242,10 +242,11 @@ const EsborrarDades = () => {
           </section>
 
           <section className="mt-6">
-            <h2 className="font-display font-bold text-base mt-4 mb-2">{T.h2GetId}</h2>
+            <h2 className="font-display font-bold text-base mt-4 mb-2 text-foreground">{T.h2GetId}</h2>
             <p>{T.getIdP}</p>
-            <p className="text-[10px] text-muted-foreground">{T.getIdSmall}</p>
+            <p className="text-[12px]">{T.getIdSmall}</p>
           </section>
+
 
           <section className="mt-6">
             <h2 className="font-display font-bold text-base mt-4 mb-2">{T.h2Form}</h2>
