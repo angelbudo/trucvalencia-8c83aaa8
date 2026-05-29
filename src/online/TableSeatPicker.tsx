@@ -122,17 +122,10 @@ function SeatBubble({
           ? "border-primary/40 bg-background/60 text-foreground/80"
           : "border-dashed border-primary/40 bg-background/30 text-muted-foreground";
 
-  const Icon =
-    occupant.kind === "bot"
-      ? Bot
-      : occupant.kind === "empty"
-        ? UserPlus
-        : User;
+  const Icon = occupant.kind === "bot" ? Bot : occupant.kind === "empty" ? UserPlus : User;
 
   const avatarUrl =
-    occupant.kind === "me" || occupant.kind === "human"
-      ? occupant.avatarUrl ?? null
-      : null;
+    occupant.kind === "me" || occupant.kind === "human" ? (occupant.avatarUrl ?? null) : null;
 
   const t = useT();
   const label =

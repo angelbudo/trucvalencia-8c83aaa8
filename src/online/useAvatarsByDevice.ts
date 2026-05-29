@@ -10,7 +10,9 @@ export function useAvatarsByDevice(
   userIdsByDevice: Record<string, string | null> = {},
 ): Record<string, string | null> {
   const [map, setMap] = useState<Record<string, string | null>>({});
-  const key = Array.from(new Set(deviceIds.filter(Boolean))).sort().join("|");
+  const key = Array.from(new Set(deviceIds.filter(Boolean)))
+    .sort()
+    .join("|");
   const userKey = Object.entries(userIdsByDevice)
     .filter(([deviceId, userId]) => deviceId && userId)
     .sort(([a], [b]) => a.localeCompare(b))
@@ -35,37 +37,41 @@ export function useAvatarsByDevice(
       }
 
       const missing = ids.filter((id) => !next[id]);
-      await Promise.all(missing.map(async (id) => {
-        let avatarUrl: string | null = null;
-        try {
-          const { data: profile } = await supabase.rpc("get_public_player_profile_by_device", {
-            p_device_id: id,
-          });
-          const row = Array.isArray(profile) ? profile[0] : profile;
-          avatarUrl = (row as { avatar_url?: string | null } | undefined)?.avatar_url ?? null;
-        } catch {
-          avatarUrl = null;
-        }
-
-        const userId = userIdsByDevice[id];
-        if (!avatarUrl && userId) {
+      await Promise.all(
+        missing.map(async (id) => {
+          let avatarUrl: string | null = null;
           try {
-            const { data: profile } = await supabase.rpc("get_public_player_profile_by_user_id", {
-              p_user_id: userId,
+            const { data: profile } = await supabase.rpc("get_public_player_profile_by_device", {
+              p_device_id: id,
             });
             const row = Array.isArray(profile) ? profile[0] : profile;
             avatarUrl = (row as { avatar_url?: string | null } | undefined)?.avatar_url ?? null;
           } catch {
             avatarUrl = null;
           }
-        }
 
-        next[id] = avatarUrl;
-      }));
+          const userId = userIdsByDevice[id];
+          if (!avatarUrl && userId) {
+            try {
+              const { data: profile } = await supabase.rpc("get_public_player_profile_by_user_id", {
+                p_user_id: userId,
+              });
+              const row = Array.isArray(profile) ? profile[0] : profile;
+              avatarUrl = (row as { avatar_url?: string | null } | undefined)?.avatar_url ?? null;
+            } catch {
+              avatarUrl = null;
+            }
+          }
+
+          next[id] = avatarUrl;
+        }),
+      );
 
       if (alive) setMap(next);
     })();
-    return () => { alive = false; };
+    return () => {
+      alive = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, userKey]);
   return map;
