@@ -602,10 +602,10 @@ function TableCard({
   return (
     <div className={`relative flex flex-col gap-2 ${isNonPlayable ? "opacity-50" : isPlaying && !canResume ? "opacity-70" : ""}`}>
       <div className="flex items-start justify-between gap-2">
-        <span className="text-[11px] font-display tracking-widest uppercase text-primary/85">
+        <span className="text-[13px] font-display tracking-widest uppercase text-primary/85">
           {t("lobby.table")} {room.code}
         </span>
-        <div className="text-[10px] text-muted-foreground text-right leading-tight">
+        <div className="text-[12px] text-muted-foreground text-right leading-tight">
           {isNonPlayable ? (
             <span className="text-destructive font-semibold uppercase">
               {room.status === "finished" ? t("lobby.finished") : t("lobby.closed")}
@@ -621,9 +621,9 @@ function TableCard({
           )}
         </div>
       </div>
-      <TableSeatPicker seats={seats} onSeatClick={handleSeatClick} showTeams={false} />
+      <TableSeatPicker seats={seats} onSeatClick={handleSeatClick} showTeams={false} textSize="large" />
       {showLobbyInfo && (
-        <div className="h-8 flex flex-col items-end justify-end text-[10px] text-muted-foreground leading-tight gap-0.5">
+        <div className="h-9 flex flex-col items-end justify-end text-[12px] text-muted-foreground leading-tight gap-0.5">
           <span>Cames a guanyar: <strong className="text-foreground">{room.targetCames}</strong></span>
           <span>Punts per cama: <strong className="text-foreground">{room.targetCama}</strong></span>
           <span>Temps per torn: <strong className="text-foreground">{room.turnTimeoutSec}s</strong></span>
@@ -641,12 +641,12 @@ function TableCard({
         </Button>
       )}
       {!isNonPlayable && isPlaying && !canResume && (
-        <div className="text-[10px] text-muted-foreground text-center uppercase tracking-wider">
+        <div className="text-[12px] text-muted-foreground text-center uppercase tracking-wider">
           {t("lobby.in_progress_no_join")}
         </div>
       )}
       {isNonPlayable && (
-        <div className="text-[10px] text-destructive text-center uppercase tracking-wider">
+        <div className="text-[12px] text-destructive text-center uppercase tracking-wider">
           {room.status === "finished" ? t("lobby.match_finished") : t("lobby.table_closed")}
         </div>
       )}
@@ -696,12 +696,12 @@ function PlaceholderTableCard({
   return (
     <div className="flex flex-col gap-2 opacity-90" data-placeholder-index={index}>
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-display tracking-widest uppercase text-primary/60">
+        <span className="text-[13px] font-display tracking-widest uppercase text-primary/60">
           {t("lobby.table")} {code}
         </span>
-        <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("common.free")}</span>
+        <span className="text-[12px] text-muted-foreground uppercase tracking-wider">{t("common.free")}</span>
       </div>
-      <TableSeatPicker seats={seats} onSeatClick={onCreate} showTeams={false} />
+      <TableSeatPicker seats={seats} onSeatClick={onCreate} showTeams={false} textSize="large" />
       <div className="flex items-center justify-center">
         <Button
           size="sm"
