@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Star, Trophy, Flame, Gamepad2, X, ThumbsDown, UserPlus, Users, Award } from "lucide-react";
+import { Loader2, Star, Trophy, Flame, Gamepad2, X, ThumbsDown, UserPlus, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { sendFriendRequestByCode } from "@/lib/friends";
@@ -65,8 +65,21 @@ export function PlayerProfileDialog({
   const [notFound, setNotFound] = useState(false);
   const [busy, setBusy] = useState(false);
   const [friendsList, setFriendsList] = useState<PublicFriend[]>([]);
+  // Track currently displayed profile so clicking a friend swaps in place
+  // instead of stacking another dialog on top.
+  const [currentUserId, setCurrentUserId] = useState<string | undefined>(userId);
+  const [currentDeviceId, setCurrentDeviceId] = useState<string | undefined>(deviceId);
+  const [currentFallbackName, setCurrentFallbackName] = useState<string>(fallbackName);
   const { user } = useAuth();
   const { deviceIds: onlineDevices, userIds: onlineUsers } = useOnlinePresenceLookup(open);
+
+  useEffect(() => {
+    if (open) {
+      setCurrentUserId(userId);
+      setCurrentDeviceId(deviceId);
+      setCurrentFallbackName(fallbackName);
+    }
+  }, [open, userId, deviceId, fallbackName]);
 
   useEffect(() => {
     if (!open) return;
@@ -76,9 +89,9 @@ export function PlayerProfileDialog({
     setProfile(null);
     setFriendsList([]);
     (async () => {
-      const { data, error } = userId
-        ? await supabase.rpc("get_public_player_profile_by_user_id", { p_user_id: userId })
-        : await supabase.rpc("get_public_player_profile_by_device", { p_device_id: deviceId! });
+      const { data, error } = currentUserId
+        ? await supabase.rpc("get_public_player_profile_by_user_id", { p_user_id: currentUserId })
+        : await supabase.rpc("get_public_player_profile_by_device", { p_device_id: currentDeviceId! });
       if (!alive) return;
       if (error || !data || (Array.isArray(data) && data.length === 0)) {
         setNotFound(true);
@@ -93,12 +106,15 @@ export function PlayerProfileDialog({
       setLoading(false);
     })();
     return () => { alive = false; };
-  }, [open, deviceId, userId]);
+  }, [open, currentDeviceId, currentUserId]);
 
   async function handleAddFriend() {
-    if (!profile?.friend_code) return;
     if (!user) {
       toast.error("Has d'iniciar sessió per afegir amics");
+      return;
+    }
+    if (!profile?.friend_code) {
+      toast.error("Aquest jugador no té codi d'amic");
       return;
     }
     setBusy(true);
@@ -112,11 +128,18 @@ export function PlayerProfileDialog({
     }
   }
 
+  function openFriendProfile(f: PublicFriend) {
+    const fname = f.username ?? f.display_name ?? "Jugador";
+    setCurrentUserId(f.user_id);
+    setCurrentDeviceId(undefined);
+    setCurrentFallbackName(fname);
+  }
+
   const isSelf = !!(user && profile && profile.user_id === user.id);
   const total = profile ? profile.wins + profile.losses : 0;
   const winRate = total > 0 ? Math.round(((profile?.wins ?? 0) / total) * 100) : 0;
   const prog = profile ? progressInLevel(profile.xp, profile.level) : null;
-  const displayName = profile?.username ?? profile?.display_name ?? fallbackName;
+  const displayName = profile?.username ?? profile?.display_name ?? currentFallbackName;
   const initial = (displayName || "?").trim().charAt(0).toUpperCase();
 
   return (
@@ -124,7 +147,7 @@ export function PlayerProfileDialog({
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="w-[90vw] sm:max-w-md max-h-[85vh] overflow-y-auto rounded-2xl border-primary/30">
         <DialogHeader>
-          <DialogTitle className="text-gold font-title font-black italic">Perfil del jugador</DialogTitle>
+          <DialogTitle className="font-title font-black italic text-gold text-2xl text-center">Perfil del jugador</DialogTitle>
         </DialogHeader>
 
         {loading ? (
@@ -151,7 +174,7 @@ export function PlayerProfileDialog({
                   <ConnectionStatus
                     online={
                       (!!profile.user_id && onlineUsers.has(profile.user_id)) ||
-                      (!!deviceId && onlineDevices.has(deviceId))
+                      (!!currentDeviceId && onlineDevices.has(currentDeviceId))
                     }
                     className="mt-0.5"
                   />
@@ -185,7 +208,7 @@ export function PlayerProfileDialog({
 
             {!isSelf && (
               <div className="flex justify-center pt-1">
-                <Button onClick={handleAddFriend} disabled={busy || !user} size="sm">
+                <Button type="button" onClick={handleAddFriend} disabled={busy || !user} size="sm">
                   <UserPlus className="w-4 h-4 mr-1" />
                   {user ? "Afegir com a amic" : "Inicia sessió per afegir"}
                 </Button>
@@ -204,35 +227,30 @@ export function PlayerProfileDialog({
                     const fname = f.username ?? f.display_name ?? "Jugador";
                     const finit = (fname || "?").trim().charAt(0).toUpperCase();
                     return (
-                      <PlayerProfileDialog
+                      <button
                         key={f.user_id}
-                        userId={f.user_id}
-                        fallbackName={fname}
-                        trigger={
-                          <button
-                            type="button"
-                            className="w-full flex items-center gap-3 rounded-md border border-primary/25 bg-stone-200 p-2 text-left hover:bg-stone-300 transition"
-                          >
-                            <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-primary/40 bg-background/50 flex items-center justify-center shrink-0">
-                              {f.avatar_url ? (
-                                <img src={f.avatar_url} alt={fname} className="w-full h-full object-cover" />
-                              ) : (
-                                <span className="font-display font-bold text-sm text-foreground">{finit}</span>
-                              )}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <div className="font-medium truncate text-foreground text-neutral-900 normal-case">{fname}</div>
-                              <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-bold leading-none">
-                                <span className="inline-flex items-center gap-0.5 text-[#f97415]" title="Nivell"><Star className="w-3.5 h-3.5" /> {f.level}</span>
-                                <span className="inline-flex items-center gap-0.5 text-[#93c572]" title="Partides"><Gamepad2 className="w-3.5 h-3.5" /> {f.wins + f.losses}</span>
-                                <span className="inline-flex items-center gap-0.5 text-[#ef8e39]" title="Victòries"><Trophy className="w-3.5 h-3.5" /> {f.wins}</span>
-                                <span className="inline-flex items-center gap-0.5 text-destructive" title="Derrotes"><X className="w-3.5 h-3.5" /> {f.losses}</span>
-                                <span className="inline-flex items-center gap-0.5 text-[#66a50d]" title="Ratxa màx."><Flame className="w-3.5 h-3.5" /> {f.max_streak}</span>
-                              </div>
-                            </div>
-                          </button>
-                        }
-                      />
+                        type="button"
+                        onClick={() => openFriendProfile(f)}
+                        className="w-full flex items-center gap-3 rounded-md border border-primary/25 bg-stone-200 p-2 text-left hover:bg-stone-300 transition"
+                      >
+                        <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-primary/40 bg-background/50 flex items-center justify-center shrink-0">
+                          {f.avatar_url ? (
+                            <img src={f.avatar_url} alt={fname} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="font-display font-bold text-sm text-foreground">{finit}</span>
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="font-medium truncate text-foreground text-neutral-900 normal-case">{fname}</div>
+                          <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-bold leading-none">
+                            <span className="inline-flex items-center gap-0.5 text-[#f97415]" title="Nivell"><Star className="w-3.5 h-3.5" /> {f.level}</span>
+                            <span className="inline-flex items-center gap-0.5 text-[#93c572]" title="Partides"><Gamepad2 className="w-3.5 h-3.5" /> {f.wins + f.losses}</span>
+                            <span className="inline-flex items-center gap-0.5 text-[#ef8e39]" title="Victòries"><Trophy className="w-3.5 h-3.5" /> {f.wins}</span>
+                            <span className="inline-flex items-center gap-0.5 text-destructive" title="Derrotes"><X className="w-3.5 h-3.5" /> {f.losses}</span>
+                            <span className="inline-flex items-center gap-0.5 text-[#66a50d]" title="Ratxa màx."><Flame className="w-3.5 h-3.5" /> {f.max_streak}</span>
+                          </div>
+                        </div>
+                      </button>
                     );
                   })}
                 </div>
