@@ -26,7 +26,7 @@ export function useAvatarsByDevice(deviceIds: string[]): Record<string, string |
         }
       }
 
-      const missing = ids.filter((id) => !(id in next));
+      const missing = ids.filter((id) => !next[id]);
       await Promise.all(missing.map(async (id) => {
         const { data: profile } = await supabase.rpc("get_public_player_profile_by_device", {
           p_device_id: id,
